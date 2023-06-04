@@ -18,7 +18,7 @@ const GroupLayout: FC<GroupLayoutProps> = ({ children }) => {
         <TabLink href="/group/tab2" label="タブ２" />
         <TabLink href="/group/tab3" label="タブ３" />
       </TabsLink>
-      <Box sx={{ flex: '1 1 0' }}>{children}</Box>
+      <Box sx={{ flex: '1 1 0', p: 1 }}>{children}</Box>
     </Box>
   );
 };

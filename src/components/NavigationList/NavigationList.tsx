@@ -10,7 +10,7 @@ import { NavItem } from './subComponents/NavItem';
 import { NavigationItem } from './NavigationItemType';
 
 const NAVIGATION_ITEMS: NavigationItem[] = [
-  { icon: HomeIcon, title: 'トップ', href: '/' },
+  { icon: HomeIcon, title: 'トップ', href: '/', exactPath: true },
   { icon: DescriptionIcon, title: 'ページ１', href: '/page1' },
   { icon: DescriptionIcon, title: 'ページ２', href: '/page2' },
   { icon: DescriptionIcon, title: 'ページ３', href: '/page3' },

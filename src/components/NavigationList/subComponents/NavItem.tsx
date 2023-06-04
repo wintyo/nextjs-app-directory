@@ -1,4 +1,5 @@
 import { FC } from 'react';
+import { usePathname } from 'next/navigation';
 import {
   ListItemButton,
   ListItemIcon,
@@ -14,6 +15,8 @@ export type NavItemProps = {
 };
 
 export const NavItem: FC<NavItemProps> = ({ item }) => {
+  const pathname = usePathname();
+
   const Icon = item.icon;
 
   return (
@@ -23,7 +26,13 @@ export const NavItem: FC<NavItemProps> = ({ item }) => {
       underline="none"
       color="inherit"
     >
-      <ListItemButton>
+      <ListItemButton
+        selected={
+          item.exactPath
+            ? item.href === pathname
+            : pathname.startsWith(item.href)
+        }
+      >
         {Icon && (
           <ListItemIcon>
             <Icon />
