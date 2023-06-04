@@ -1,5 +1,6 @@
 import { FC, ReactNode } from 'react';
 import { Box, AppBar, Toolbar, Typography, Drawer } from '@mui/material';
+import { NavigationList } from '~/components/NavigationList';
 
 export type DefaultLayoutProps = {
   children: ReactNode;
@@ -23,7 +24,6 @@ export const DefaultLayout: FC<DefaultLayoutProps> = ({ children }) => {
       <Drawer
         variant="permanent"
         open
-        keepMounted
         sx={(theme) => ({
           width: NAVIGATION_WIDTH,
           '& .MuiDrawer-paper': {
@@ -32,12 +32,22 @@ export const DefaultLayout: FC<DefaultLayoutProps> = ({ children }) => {
         })}
       >
         <Toolbar />
-        <div>ドロワー</div>
+        <NavigationList />
       </Drawer>
       <Box sx={{ flex: '1 1 0', display: 'flex', flexDirection: 'column' }}>
         <Toolbar />
         <Box sx={{ flex: '1 1 0', padding: 2, overflow: 'hidden' }}>
           {children}
+        </Box>
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'flex-end',
+            padding: (theme) => theme.spacing(1, 2),
+            backgroundColor: '#eee',
+          }}
+        >
+          フッター
         </Box>
       </Box>
     </Box>
