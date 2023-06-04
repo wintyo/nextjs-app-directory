@@ -15,7 +15,6 @@ export type NavItemProps = {
 
 export const NavItem: FC<NavItemProps> = ({ item }) => {
   const Icon = item.icon;
-  console.log(item);
 
   return (
     <Link

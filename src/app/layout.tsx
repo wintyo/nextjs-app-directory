@@ -11,7 +11,6 @@ export const metadata = {
 };
 
 const RootLayout: FC<{ children: ReactNode }> = (props) => {
-  console.log(props);
   const { children } = props;
   return (
     <html lang="ja">
