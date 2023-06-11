@@ -32,3 +32,4 @@ runs:
       run: |
         echo NAME=${{ steps.target_branch.outputs.NAME }}
         echo APP_ENV=${{ steps.app_env.outputs.APP_ENV }}
+      shell: bash
