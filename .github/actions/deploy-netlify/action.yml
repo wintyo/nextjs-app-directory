@@ -1,6 +1,6 @@
 inputs:
-  production-deployment-environment:
-    description: 'GitHubのDeployment Environmentに表示される名前'
+  base-deployment-environment:
+    description: 'GitHubのDeployment Environmentに表示される基本の名前（ブランチデプロイやプレビューはこの名前の後ろに追記される）'
     required: true
   production-branch:
     description: 'Productionデプロイ対象になるブランチ名'
@@ -25,12 +25,12 @@ runs:
       run: |
         if [ "$GITHUB_EVENT_NAME" = "push" ]; then
           if [ "$GITHUB_REF_NAME" = "${{ inputs.production-branch }}" ]; then
-            echo "GITHUB_DEPLOYMENT_ENVIRONMENT=${{ inputs.production-deployment-environment }}" >> $GITHUB_OUTPUT
+            echo "GITHUB_DEPLOYMENT_ENVIRONMENT=${{ inputs.base-deployment-environment }}" >> $GITHUB_OUTPUT
           else
-            echo "GITHUB_DEPLOYMENT_ENVIRONMENT=Netlify Branch $GITHUB_REF_NAME" >> $GITHUB_OUTPUT
+            echo "GITHUB_DEPLOYMENT_ENVIRONMENT=${{ inputs.base-deployment-environment }}(Branch: $GITHUB_REF_NAME)" >> $GITHUB_OUTPUT
           fi
         else
-          echo "GITHUB_DEPLOYMENT_ENVIRONMENT=Netlify Preview" >> $GITHUB_OUTPUT
+          echo "GITHUB_DEPLOYMENT_ENVIRONMENT=${{ inputs.base-deployment-environment }}(Preview)" >> $GITHUB_OUTPUT
         fi
       shell: bash
 
