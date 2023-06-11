@@ -18,7 +18,9 @@ export const DefaultLayout: FC<DefaultLayoutProps> = ({ children }) => {
         }}
       >
         <Toolbar>
-          <Typography>App Directoryの検証</Typography>
+          <Typography>
+            App Directoryの検証({process.env.NEXT_PUBLIC_ENV_NAME})
+          </Typography>
         </Toolbar>
       </AppBar>
       <Drawer

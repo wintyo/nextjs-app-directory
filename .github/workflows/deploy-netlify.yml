@@ -29,9 +29,14 @@ jobs:
       - name: Install
         run: npm install
 
-      # TODO: ブランチによって環境変数を変える
+      - name: Get App Env
+        id: get_app_env
+        uses: ./.github/actions/get-app-env
+
       - name: Build
         run: npm run build
+        env:
+          APP_ENV: ${{ steps.get_app_env.outputs.APP_ENV }}
 
       - name: Deploy to Netlify
         uses: ./.github/actions/deploy-netlify
