@@ -47,9 +47,13 @@ jobs:
             * ) echo "APP_ENV=dev" >> $GITHUB_OUTPUT ;;
           esac
 
-      # - name: Get App Env
-      #   uses: ./.github/actions/get-app-env
-      #   id: app-env
+      - name: Get App Env
+        id: test-app-env
+        uses: ./.github/actions/get-app-env
+
+      - name: Debug
+        run: |
+          echo ${{ steps.test-app-env.outputs.APP_ENV }}
 
       - name: Build
         run: npm run build
