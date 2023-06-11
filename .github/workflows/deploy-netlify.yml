@@ -29,9 +29,27 @@ jobs:
       - name: Install
         run: npm install
 
-      - name: Get App Env
-        uses: ./.github/actions/get-app-env
-        id: app-env
+      - name: Get Target Branch
+        id: target_branch
+        run: |
+          if [ "$GITHUB_EVENT_NAME" = "pull_request" ]; then
+            echo "NAME=$GITHUB_BASE_REF" >> $GITHUB_OUTPUT
+          else
+            echo "NAME=$GITHUB_REF_NAME" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Set App Env
+        id: app_env
+        run: |
+          case "${{ steps.target_branch.outputs.NAME }}" in
+            "dev" ) echo "APP_ENV=dev" >> $GITHUB_OUTPUT ;;
+            "main" ) echo "APP_ENV=prod" >> $GITHUB_OUTPUT ;;
+            * ) echo "APP_ENV=dev" >> $GITHUB_OUTPUT ;;
+          esac
+
+      # - name: Get App Env
+      #   uses: ./.github/actions/get-app-env
+      #   id: app-env
 
       - name: Build
         run: npm run build

@@ -6,7 +6,7 @@ outputs:
     value: ${{ steps.app_env.outputs.APP_ENV }}
 
 runs:
-  using: 'Composite'
+  using: 'composite'
   steps:
     - name: Get Target Branch
       id: target_branch
@@ -24,6 +24,6 @@ runs:
         case "${{ steps.target_branch.outputs.NAME }}" in
           "dev" ) echo "APP_ENV=dev" >> $GITHUB_OUTPUT ;;
           "main" ) echo "APP_ENV=prod" >> $GITHUB_OUTPUT ;;
-          *) echo "APP_ENV=dev" >> $GITHUB_OUTPUT ;;
+          * ) echo "APP_ENV=dev" >> $GITHUB_OUTPUT ;;
         esac
       shell: bash
