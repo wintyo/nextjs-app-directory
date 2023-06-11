@@ -1,6 +1,6 @@
 inputs:
-  production-deployment-environment:
-    description: 'GitHubのDeployment Environmentに表示される名前'
+  base-deployment-environment:
+    description: 'GitHubのDeployment Environmentに表示される基本の名前（ブランチデプロイやプレビューはこの名前の後ろに追記される）'
     required: true
   production-branch:
     description: 'Productionデプロイ対象になるブランチ名'
@@ -18,15 +18,29 @@ inputs:
     required: true
 
 runs:
-  using: 'Composite'
+  using: 'composite'
   steps:
     - name: Set GitHub Deployment Environment
       id: github_deployment_environment
       run: |
         if [ "$GITHUB_EVENT_NAME" = "push" ]; then
-          echo "GITHUB_DEPLOYMENT_ENVIRONMENT=${{ inputs.production-deployment-environment }}" >> "${GITHUB_OUTPUT}"
+          if [ "$GITHUB_REF_NAME" = "${{ inputs.production-branch }}" ]; then
+            echo "GITHUB_DEPLOYMENT_ENVIRONMENT=${{ inputs.base-deployment-environment }}" >> $GITHUB_OUTPUT
+          else
+            echo "GITHUB_DEPLOYMENT_ENVIRONMENT=${{ inputs.base-deployment-environment }}(Branch: $GITHUB_REF_NAME)" >> $GITHUB_OUTPUT
+          fi
         else
-          echo "GITHUB_DEPLOYMENT_ENVIRONMENT=Netlify Preview" >> "${GITHUB_OUTPUT}"
+          echo "GITHUB_DEPLOYMENT_ENVIRONMENT=${{ inputs.base-deployment-environment }}(Preview)" >> $GITHUB_OUTPUT
+        fi
+      shell: bash
+
+    - name: Set Netlify Alias
+      id: netlify_alias
+      run: |
+        if [ "$GITHUB_EVENT_NAME" = "push" ]; then
+          echo "ALIAS=$GITHUB_REF_NAME" >> $GITHUB_OUTPUT
+        else
+          echo "ALIAS=deploy-preview-${{ github.event.number }}" >> $GITHUB_OUTPUT
         fi
       shell: bash
 
@@ -38,7 +52,7 @@ runs:
         github-deployment-environment: ${{ steps.github_deployment_environment.outputs.GITHUB_DEPLOYMENT_ENVIRONMENT }}
         github-token: ${{ inputs.GITHUB_TOKEN }}
         deploy-message: ${{ github.event.head_commit.message || github.event.pull_request.title }}
-        alias: deploy-preview-${{ github.event.number }}
+        alias: ${{ steps.netlify_alias.outputs.ALIAS }}
         # enable-commit-comment: false
         # enable-commit-status: false
         fails-without-credentials: true

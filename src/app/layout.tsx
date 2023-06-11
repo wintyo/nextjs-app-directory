@@ -10,6 +10,8 @@ export const metadata = {
   title: 'App Directoryの検証',
 };
 
+console.log(`${process.env.NEXT_PUBLIC_APP_ENV} application`);
+
 const RootLayout: FC<{ children: ReactNode }> = (props) => {
   const { children } = props;
   return (

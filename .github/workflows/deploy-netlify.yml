@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - dev
   pull_request:
 
 permissions:
@@ -28,13 +29,19 @@ jobs:
       - name: Install
         run: npm install
 
+      - name: Get App Env
+        id: get_app_env
+        uses: ./.github/actions/get-app-env
+
       - name: Build
         run: npm run build
+        env:
+          APP_ENV: ${{ steps.get_app_env.outputs.APP_ENV }}
 
       - name: Deploy to Netlify
         uses: ./.github/actions/deploy-netlify
         with:
-          production-deployment-environment: 'Netlify Prd'
+          base-deployment-environment: 'Netlify'
           production-branch: main
           publish-dir: dist
           netlify-site-id: ${{ vars.NETLIFY_SITE_ID }}
