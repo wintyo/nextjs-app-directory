@@ -29,6 +29,7 @@ jobs:
       - name: Install
         run: npm install
 
+      # TODO: ブランチによって環境変数を変える
       - name: Build
         run: npm run build
 
