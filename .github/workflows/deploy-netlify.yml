@@ -48,7 +48,7 @@ jobs:
       #     esac
 
       - name: Get App Env
-        id: app-env
+        id: app_env
         uses: ./.github/actions/get-app-env
 
       - name: Build
