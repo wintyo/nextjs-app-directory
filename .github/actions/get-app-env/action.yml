@@ -1,0 +1,29 @@
+description: 'pushやprの状態を見て、セットすべきAPP_ENVを返す'
+
+outputs:
+  APP_ENV:
+    description: 'アプリケーションの環境'
+    value: ${{ steps.app_env.outputs.APP_ENV }}
+
+runs:
+  using: 'Composite'
+  steps:
+    - name: Get Target Branch
+      id: target_branch
+      run: |
+        if [ "$GITHUB_EVENT_NAME" = "pull_request" ]; then
+          echo "NAME=$GITHUB_BASE_REF" >> $GITHUB_OUTPUT
+        else
+          echo "NAME=$GITHUB_REF_NAME" >> $GITHUB_OUTPUT
+        fi
+      shell: bash
+
+    - name: Set App Env
+      id: app_env
+      run: |
+        case "${{ steps.target_branch.outputs.NAME }}" in
+          "dev" ) echo "APP_ENV=dev" >> $GITHUB_OUTPUT ;;
+          "main" ) echo "APP_ENV=prod" >> $GITHUB_OUTPUT ;;
+          *) echo "APP_ENV=dev" >> $GITHUB_OUTPUT ;;
+        esac
+      shell: bash
