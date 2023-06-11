@@ -36,7 +36,7 @@ jobs:
       - name: Deploy to Netlify
         uses: ./.github/actions/deploy-netlify
         with:
-          production-deployment-environment: 'Netlify Prd'
+          base-deployment-environment: 'Netlify'
           production-branch: main
           publish-dir: dist
           netlify-site-id: ${{ vars.NETLIFY_SITE_ID }}
