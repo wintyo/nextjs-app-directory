@@ -2,7 +2,6 @@ import './globals.css';
 import { FC, ReactNode } from 'react';
 import { Inter } from 'next/font/google';
 import { EmotionRegistry } from './EmotionRegistry';
-import { LayoutSwitcher } from './LayoutSwitcher';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -17,9 +16,7 @@ const RootLayout: FC<{ children: ReactNode }> = (props) => {
   return (
     <html lang="ja">
       <body className={inter.className}>
-        <EmotionRegistry>
-          <LayoutSwitcher>{children}</LayoutSwitcher>
-        </EmotionRegistry>
+        <EmotionRegistry>{children}</EmotionRegistry>
       </body>
     </html>
   );

@@ -4,6 +4,7 @@ import {
   Home as HomeIcon,
   Description as DescriptionIcon,
   Tab as TabIcon,
+  CropPortraitOutlined as CropPortraitOutlinedIcon,
 } from '@mui/icons-material';
 
 import { NavItem } from './subComponents/NavItem';
@@ -11,6 +12,7 @@ import { NavigationItem } from './NavigationItemType';
 
 const NAVIGATION_ITEMS: NavigationItem[] = [
   { icon: HomeIcon, title: 'トップ', href: '/', exactPath: true },
+  { icon: CropPortraitOutlinedIcon, title: 'プレーンページ', href: '/plain' },
   { icon: DescriptionIcon, title: 'ページ１', href: '/page1' },
   { icon: DescriptionIcon, title: 'ページ２', href: '/page2' },
   { icon: DescriptionIcon, title: 'ページ３', href: '/page3' },
