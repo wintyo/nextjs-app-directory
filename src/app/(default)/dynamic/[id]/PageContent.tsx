@@ -8,13 +8,20 @@ export type DynamicPageContentProps = {};
 const DynamicPageContent: FC<DynamicPageContentProps> = () => {
   const params = useParams() || {};
   const [isValid, setIsValid] = useState<boolean | null>(null);
-  console.log(params, isValid);
+  const [id, setId] = useState<number | null>(null);
+  console.log(params, isValid, id);
 
   // すぐチェックするとページがSSGされないのであえてuseEffectでチェックしてから表示する
   useEffect(() => {
-    const isValid = /^[0-9]+$/.test(params.id as string);
-    setIsValid(isValid);
-  }, [params.id]);
+    // paramsはSSGされた値で固定されているためlocationから取得する
+    const match = location.pathname.match(/\/dynamic\/([0-9]+)/);
+    if (match) {
+      setId(Number(match[1]));
+      setIsValid(true);
+    } else {
+      setIsValid(false);
+    }
+  }, []);
 
   if (isValid == null) {
     return <>認証中...</>;
@@ -27,7 +34,7 @@ const DynamicPageContent: FC<DynamicPageContentProps> = () => {
   return (
     <div>
       <div>動的ページ</div>
-      <div>ID: {params.id}</div>
+      <div>ID: {id}</div>
     </div>
   );
 };
