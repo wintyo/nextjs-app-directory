@@ -15,7 +15,7 @@ export type NavItemProps = {
 };
 
 export const NavItem: FC<NavItemProps> = ({ item }) => {
-  const pathname = usePathname();
+  const pathname = usePathname() || '';
 
   const Icon = item.icon;
 

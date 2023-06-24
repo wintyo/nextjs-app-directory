@@ -12,11 +12,11 @@ import { NavigationItem } from './NavigationItemType';
 
 const NAVIGATION_ITEMS: NavigationItem[] = [
   { icon: HomeIcon, title: 'トップ', href: '/', exactPath: true },
-  { icon: CropPortraitOutlinedIcon, title: 'プレーンページ', href: '/plain' },
-  { icon: DescriptionIcon, title: 'ページ１', href: '/page1' },
-  { icon: DescriptionIcon, title: 'ページ２', href: '/page2' },
-  { icon: DescriptionIcon, title: 'ページ３', href: '/page3' },
-  { icon: TabIcon, title: 'タブグループ', href: '/group' },
+  { icon: CropPortraitOutlinedIcon, title: 'プレーンページ', href: '/plain/' },
+  { icon: DescriptionIcon, title: 'ページ１', href: '/page1/' },
+  { icon: DescriptionIcon, title: 'ページ２', href: '/page2/' },
+  { icon: DescriptionIcon, title: 'ページ３', href: '/page3/' },
+  { icon: TabIcon, title: 'タブグループ', href: '/group/' },
 ];
 
 export type NavigationListProps = {};
