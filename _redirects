@@ -1,2 +1,2 @@
 # Netlifyのリダイレクト設定
-/* /index.html 200
+/dynamic/:id /dynamic/_id/index.html 200
