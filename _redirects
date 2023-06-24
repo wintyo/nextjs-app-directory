@@ -1,2 +1,3 @@
 # Netlifyのリダイレクト設定
-/dynamic/:id /dynamic/_id/index.html 200
+# 動的ルーティングのパスは末尾にindex.txtが勝手につくのでそれベースで設定する
+/dynamic/:id/index.txt /dynamic/_id/index.html 200
