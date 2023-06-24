@@ -1,27 +1,10 @@
-'use client';
+import { FC } from 'react';
 
-import { FC, Fragment } from 'react';
-import NextLink from 'next/link';
-import { usePathname } from 'next/navigation';
-import { Button } from '@mui/material';
-
-import { DefaultLayout } from '~/layouts/DefaultLayout';
+import NotFoundPageContent from './NotFoundContent';
 
 const NotFoundPage: FC = (props) => {
-  const pathname = usePathname();
-
   console.log('not found:', props);
-  console.log(pathname);
-
-  const Layout = pathname.startsWith('/dynamic') ? DefaultLayout : Fragment;
-  return (
-    <Layout>
-      <div>Not Foundだよ</div>
-      <Button LinkComponent={NextLink} href="/" variant="text">
-        トップに戻る
-      </Button>
-    </Layout>
-  );
+  return <NotFoundPageContent />;
 };
 
 export default NotFoundPage;

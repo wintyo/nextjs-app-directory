@@ -6,13 +6,13 @@ import { notFound, useParams } from 'next/navigation';
 export type DynamicPageContentProps = {};
 
 const DynamicPageContent: FC<DynamicPageContentProps> = () => {
-  const params = useParams();
+  const params = useParams() || {};
   const [isValid, setIsValid] = useState<boolean | null>(null);
   console.log(params, isValid);
 
   // すぐチェックするとページがSSGされないのであえてuseEffectでチェックしてから表示する
   useEffect(() => {
-    const isValid = /^[0-9]+$/.test(params.id);
+    const isValid = /^[0-9]+$/.test(params.id as string);
     setIsValid(isValid);
   }, [params.id]);
 
