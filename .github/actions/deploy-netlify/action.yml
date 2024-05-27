@@ -49,6 +49,7 @@ runs:
       run: |
         git show --format=%B
         echo "COMMIT_MESSAGE=$(git show --format=%B)" >> $GITHUB_OUTPUT
+      shell: bash
 
     # - name: Deploy to Netlify
     #   uses: nwtgck/actions-netlify@v1.2
