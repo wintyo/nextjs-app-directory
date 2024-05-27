@@ -71,9 +71,11 @@ runs:
         with: |
           publish-dir: ${{ inputs.publish-dir }}
           production-branch: ${{ inputs.production-branch }}
-          github-deployment-environment: ${{ steps.github_deployment_environment.outputs.GITHUB_DEPLOYMENT_ENVIRONMENT }}
+          github-deployment-environment: |
+            ${{ steps.github_deployment_environment.outputs.GITHUB_DEPLOYMENT_ENVIRONMENT }}
           github-token: ${{ inputs.GITHUB_TOKEN }}
-          deploy-message: ${{ github.event.head_commit.message || github.event.pull_request.title }}
+          deploy-message: |
+            ${{ github.event.head_commit.message || github.event.pull_request.title }}
           alias: ${{ steps.netlify_alias.outputs.ALIAS }}
           # enable-commit-comment: false
           # enable-commit-status: false
