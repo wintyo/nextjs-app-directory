@@ -8,6 +8,6 @@
 
   // 保存時にauto fixさせる
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": true
+    "source.fixAll.eslint": "explicit"
   }
 }
