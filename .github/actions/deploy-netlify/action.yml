@@ -77,9 +77,10 @@ runs:
           deploy-message: |
             ${{ github.event.head_commit.message || github.event.pull_request.title }}
           alias: ${{ steps.netlify_alias.outputs.ALIAS }}
-          # enable-commit-comment: false
-          # enable-commit-status: false
           fails-without-credentials: true
+        # コメントアウトしたパラメータがwithブロックの中でコメントしてくれるか分からないため外に出した
+        # enable-commit-comment: false
+        # enable-commit-status: false
       env:
         NETLIFY_AUTH_TOKEN: ${{ inputs.NETLIFY_AUTH_TOKEN }}
         NETLIFY_SITE_ID: ${{ inputs.netlify-site-id }}
