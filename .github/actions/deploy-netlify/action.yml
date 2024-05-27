@@ -76,9 +76,8 @@ runs:
           github-token: ${{ inputs.GITHUB_TOKEN }}
           deploy-message: |
             ${{ github.event.head_commit.message || github.event.pull_request.title }}
-
-          # 複数行との違いが分かるように空行を入れている
-          alias: ${{ steps.netlify_alias.outputs.ALIAS }}
+          alias: |
+            ${{ steps.netlify_alias.outputs.ALIAS }}
           fails-without-credentials: true
         # コメントアウトしたパラメータがwithブロックの中でコメントしてくれるか分からないため外に出した
         # enable-commit-comment: false
