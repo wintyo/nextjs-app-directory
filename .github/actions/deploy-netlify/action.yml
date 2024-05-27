@@ -47,8 +47,8 @@ runs:
     - name: Get Commit Message
       id: commit_message
       run: |
-        git show --format=%B
-        echo "COMMIT_MESSAGE=$(git show -s --format=%B)" >> $GITHUB_OUTPUT
+        git show $GITHUB_SHA -s --format=%B
+        echo "COMMIT_MESSAGE=$(git show $GITHUB_SHA -s --format=%B)" >> $GITHUB_OUTPUT
       shell: bash
 
     # - name: Deploy to Netlify
