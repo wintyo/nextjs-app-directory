@@ -44,6 +44,12 @@ runs:
         fi
       shell: bash
 
+    - name: Get Commit Message
+      id: commit_message
+      run: |
+        git show --format=%B
+        echo "COMMIT_MESSAGE=$(git show --format=%B)" >> $GITHUB_OUTPUT
+
     # - name: Deploy to Netlify
     #   uses: nwtgck/actions-netlify@v1.2
     #   with:
@@ -73,7 +79,8 @@ runs:
           production-branch: ${{ inputs.production-branch }}
           github-deployment-environment: ${{ steps.github_deployment_environment.outputs.GITHUB_DEPLOYMENT_ENVIRONMENT }}
           github-token: ${{ inputs.GITHUB_TOKEN }}
-          deploy-message: ${{ github.event.head_commit.message || github.event.pull_request.title }}
+          deploy-message: ${{ steps.commit_message.outputs.COMMIT_MESSAGE }}
+          # deploy-message: ${{ github.event.head_commit.message || github.event.pull_request.title }}
           alias: ${{ steps.netlify_alias.outputs.ALIAS }}
           # enable-commit-comment: false
           # enable-commit-status: false
