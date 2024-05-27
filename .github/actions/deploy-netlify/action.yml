@@ -44,18 +44,40 @@ runs:
         fi
       shell: bash
 
-    - name: Deploy to Netlify
-      uses: nwtgck/actions-netlify@v1.2
+    # - name: Deploy to Netlify
+    #   uses: nwtgck/actions-netlify@v1.2
+    #   with:
+    #     publish-dir: ${{ inputs.publish-dir }}
+    #     production-branch: ${{ inputs.production-branch }}
+    #     github-deployment-environment: ${{ steps.github_deployment_environment.outputs.GITHUB_DEPLOYMENT_ENVIRONMENT }}
+    #     github-token: ${{ inputs.GITHUB_TOKEN }}
+    #     deploy-message: ${{ github.event.head_commit.message || github.event.pull_request.title }}
+    #     alias: ${{ steps.netlify_alias.outputs.ALIAS }}
+    #     # enable-commit-comment: false
+    #     # enable-commit-status: false
+    #     fails-without-credentials: true
+    #   env:
+    #     NETLIFY_AUTH_TOKEN: ${{ inputs.NETLIFY_AUTH_TOKEN }}
+    #     NETLIFY_SITE_ID: ${{ inputs.netlify-site-id }}
+
+    # リトライ可能なデプロイ
+    - name: Retryable Deploying to Netlify
+      # https://github.com/nick-fields/retry/issues/91
+      # https://github.com/Wandalen/wretry.action/tree/v3
+      uses: Wandalen/wretry.action/main@v3
       with:
-        publish-dir: ${{ inputs.publish-dir }}
-        production-branch: ${{ inputs.production-branch }}
-        github-deployment-environment: ${{ steps.github_deployment_environment.outputs.GITHUB_DEPLOYMENT_ENVIRONMENT }}
-        github-token: ${{ inputs.GITHUB_TOKEN }}
-        deploy-message: ${{ github.event.head_commit.message || github.event.pull_request.title }}
-        alias: ${{ steps.netlify_alias.outputs.ALIAS }}
-        # enable-commit-comment: false
-        # enable-commit-status: false
-        fails-without-credentials: true
+        attempt_limit: 3
+        action: nwtgck/actions-netlify@v3.0
+        with: |
+          publish-dir: ${{ inputs.publish-dir }}
+          production-branch: ${{ inputs.production-branch }}
+          github-deployment-environment: ${{ steps.github_deployment_environment.outputs.GITHUB_DEPLOYMENT_ENVIRONMENT }}
+          github-token: ${{ inputs.GITHUB_TOKEN }}
+          deploy-message: ${{ github.event.head_commit.message || github.event.pull_request.title }}
+          alias: ${{ steps.netlify_alias.outputs.ALIAS }}
+          # enable-commit-comment: false
+          # enable-commit-status: false
+          fails-without-credentials: true
       env:
         NETLIFY_AUTH_TOKEN: ${{ inputs.NETLIFY_AUTH_TOKEN }}
         NETLIFY_SITE_ID: ${{ inputs.netlify-site-id }}
