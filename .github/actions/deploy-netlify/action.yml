@@ -84,7 +84,11 @@ runs:
           production-branch: ${{ inputs.production-branch }}
           github-deployment-environment: ${{ steps.github_deployment_environment.outputs.GITHUB_DEPLOYMENT_ENVIRONMENT }}
           github-token: ${{ inputs.GITHUB_TOKEN }}
-          deploy-message: ${{ steps.commit_message.outputs.COMMIT_MESSAGE }}
+          deploy-message: |
+            複数行メッセージの確認
+
+            インデントがきちんと入ってさえいればパラメータとして渡せるかを確認
+          # deploy-message: ${{ steps.commit_message.outputs.COMMIT_MESSAGE }}
           # deploy-message: ${{ github.event.head_commit.message || github.event.pull_request.title }}
           alias: ${{ steps.netlify_alias.outputs.ALIAS }}
           # enable-commit-comment: false
