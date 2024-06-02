@@ -48,9 +48,9 @@ runs:
       id: commit_message
       run: |
         {
-          echo "COMMIT_MESSAGE<<EOF"
+          echo 'COMMIT_MESSAGE<<EOF'
           $(git show ${{ github.event.pull_request.head.sha }} -s --format=%B)"
-          echo "EOF"
+          echo EOF
         } >> $GITHUB_OUTPUT
       shell: bash
 
