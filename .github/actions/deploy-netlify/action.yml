@@ -47,7 +47,11 @@ runs:
     - name: Get Commit Message
       id: commit_message
       run: |
-        echo "COMMIT_MESSAGE=$(git show ${{ github.event.pull_request.head.sha }} -s --format=%B)" >> $GITHUB_OUTPUT
+        {
+          echo "COMMIT_MESSAGE<<EOF"
+          $(git show ${{ github.event.pull_request.head.sha }} -s --format=%B)"
+          echo "EOF"
+        } >> $GITHUB_OUTPUT
       shell: bash
 
     # - name: Deploy to Netlify
