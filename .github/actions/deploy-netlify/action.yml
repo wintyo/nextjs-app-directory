@@ -46,10 +46,11 @@ runs:
 
     - name: Get Commit Message
       id: commit_message
+      # https://docs.github.com/ja/actions/using-workflows/workflow-commands-for-github-actions#example-of-a-multiline-string
       run: |
         {
           echo 'COMMIT_MESSAGE<<EOF'
-          $(git show ${{ github.event.pull_request.head.sha }} -s --format=%B)"
+          git show ${{ github.event.pull_request.head.sha }} -s --format=%B
           echo EOF
         } >> $GITHUB_OUTPUT
       shell: bash
