@@ -44,18 +44,65 @@ runs:
         fi
       shell: bash
 
-    - name: Deploy to Netlify
-      uses: nwtgck/actions-netlify@v1.2
+    # PR中でもコミットメッセージを参照してデバッグする用のステップ
+    # - name: Get Commit Message
+    #   id: commit_message
+    #   # https://docs.github.com/ja/actions/using-workflows/workflow-commands-for-github-actions#example-of-a-multiline-string
+    #   run: |
+    #     {
+    #       echo 'COMMIT_MESSAGE<<EOF'
+    #       git show ${{ github.event.pull_request.head.sha }} -s --format=%B
+    #       echo EOF
+    #     } >> $GITHUB_OUTPUT
+    #   shell: bash
+
+    # - name: Deploy to Netlify
+    #   uses: nwtgck/actions-netlify@v1.2
+    #   with:
+    #     publish-dir: ${{ inputs.publish-dir }}
+    #     production-branch: ${{ inputs.production-branch }}
+    #     github-deployment-environment: ${{ steps.github_deployment_environment.outputs.GITHUB_DEPLOYMENT_ENVIRONMENT }}
+    #     github-token: ${{ inputs.GITHUB_TOKEN }}
+    #     deploy-message: ${{ github.event.head_commit.message || github.event.pull_request.title }}
+    #     alias: ${{ steps.netlify_alias.outputs.ALIAS }}
+    #     # enable-commit-comment: false
+    #     # enable-commit-status: false
+    #     fails-without-credentials: true
+    #   env:
+    #     NETLIFY_AUTH_TOKEN: ${{ inputs.NETLIFY_AUTH_TOKEN }}
+    #     NETLIFY_SITE_ID: ${{ inputs.netlify-site-id }}
+
+    # コミットメッセージは複数行入ることがあるので、一行分になるように調整
+    - name: Pick Commit Title
+      id: commit_title
+      run: |
+        # ダブルクォートを囲わずにechoをすると改行はスペースに変わって代入される
+        COMMIT_TITLE=$(echo $COMMIT_MESSAGE)
+        # 一行だけ抽出する場合は以下のようにする
+        # COMMIT_TITLE=$(echo "$COMMIT_MESSAGE" | sed -n 1p)
+        echo "COMMIT_TITLE=$(echo $COMMIT_TITLE)" >> $GITHUB_OUTPUT
+      env:
+        COMMIT_MESSAGE: ${{ github.event.head_commit.message || github.event.pull_request.title }}
+      shell: bash
+
+    # リトライ可能なデプロイ
+    - name: Retryable Deploying to Netlify
+      # https://github.com/nick-fields/retry/issues/91
+      # https://github.com/Wandalen/wretry.action/tree/v3
+      uses: Wandalen/wretry.action/main@v3
       with:
-        publish-dir: ${{ inputs.publish-dir }}
-        production-branch: ${{ inputs.production-branch }}
-        github-deployment-environment: ${{ steps.github_deployment_environment.outputs.GITHUB_DEPLOYMENT_ENVIRONMENT }}
-        github-token: ${{ inputs.GITHUB_TOKEN }}
-        deploy-message: ${{ github.event.head_commit.message || github.event.pull_request.title }}
-        alias: ${{ steps.netlify_alias.outputs.ALIAS }}
-        # enable-commit-comment: false
-        # enable-commit-status: false
-        fails-without-credentials: true
+        attempt_limit: 3
+        action: nwtgck/actions-netlify@v3.0
+        with: |
+          publish-dir: ${{ inputs.publish-dir }}
+          production-branch: ${{ inputs.production-branch }}
+          github-deployment-environment: ${{ steps.github_deployment_environment.outputs.GITHUB_DEPLOYMENT_ENVIRONMENT }}
+          github-token: ${{ inputs.GITHUB_TOKEN }}
+          deploy-message: ${{ steps.commit_title.outputs.COMMIT_TITLE }}
+          alias: ${{ steps.netlify_alias.outputs.ALIAS }}
+          # enable-commit-comment: false
+          # enable-commit-status: false
+          fails-without-credentials: true
       env:
         NETLIFY_AUTH_TOKEN: ${{ inputs.NETLIFY_AUTH_TOKEN }}
         NETLIFY_SITE_ID: ${{ inputs.netlify-site-id }}
