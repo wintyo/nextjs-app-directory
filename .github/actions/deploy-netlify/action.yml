@@ -45,16 +45,16 @@ runs:
       shell: bash
 
     # PR中でもコミットメッセージを参照してデバッグする用のステップ
-    - name: Get Commit Message
-      id: commit_message
-      # https://docs.github.com/ja/actions/using-workflows/workflow-commands-for-github-actions#example-of-a-multiline-string
-      run: |
-        {
-          echo 'COMMIT_MESSAGE<<EOF'
-          git show ${{ github.event.pull_request.head.sha }} -s --format=%B
-          echo EOF
-        } >> $GITHUB_OUTPUT
-      shell: bash
+    # - name: Get Commit Message
+    #   id: commit_message
+    #   # https://docs.github.com/ja/actions/using-workflows/workflow-commands-for-github-actions#example-of-a-multiline-string
+    #   run: |
+    #     {
+    #       echo 'COMMIT_MESSAGE<<EOF'
+    #       git show ${{ github.event.pull_request.head.sha }} -s --format=%B
+    #       echo EOF
+    #     } >> $GITHUB_OUTPUT
+    #   shell: bash
 
     # - name: Deploy to Netlify
     #   uses: nwtgck/actions-netlify@v1.2
@@ -72,7 +72,7 @@ runs:
     #     NETLIFY_AUTH_TOKEN: ${{ inputs.NETLIFY_AUTH_TOKEN }}
     #     NETLIFY_SITE_ID: ${{ inputs.netlify-site-id }}
 
-    # コミットメッセージは複数行入ることがあるので、最初の行だけを取得
+    # コミットメッセージは複数行入ることがあるので、一行分になるように調整
     - name: Pick Commit Title
       id: commit_title
       run: |
@@ -82,7 +82,7 @@ runs:
         # COMMIT_TITLE=$(echo "$COMMIT_MESSAGE" | sed -n 1p)
         echo "COMMIT_TITLE=$(echo $COMMIT_TITLE)" >> $GITHUB_OUTPUT
       env:
-        COMMIT_MESSAGE: ${{ steps.commit_message.outputs.COMMIT_MESSAGE }}
+        COMMIT_MESSAGE: ${{ github.event.head_commit.message || github.event.pull_request.title }}
       shell: bash
 
     # リトライ可能なデプロイ
@@ -99,7 +99,6 @@ runs:
           github-deployment-environment: ${{ steps.github_deployment_environment.outputs.GITHUB_DEPLOYMENT_ENVIRONMENT }}
           github-token: ${{ inputs.GITHUB_TOKEN }}
           deploy-message: ${{ steps.commit_title.outputs.COMMIT_TITLE }}
-          # deploy-message: ${{ github.event.head_commit.message || github.event.pull_request.title }}
           alias: ${{ steps.netlify_alias.outputs.ALIAS }}
           # enable-commit-comment: false
           # enable-commit-status: false
