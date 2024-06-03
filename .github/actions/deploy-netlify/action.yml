@@ -96,9 +96,11 @@ runs:
         with: |
           publish-dir: ${{ inputs.publish-dir }}
           production-branch: ${{ inputs.production-branch }}
-          github-deployment-environment: ${{ steps.github_deployment_environment.outputs.GITHUB_DEPLOYMENT_ENVIRONMENT }}
+          github-deployment-environment: |
+            ${{ steps.github_deployment_environment.outputs.GITHUB_DEPLOYMENT_ENVIRONMENT }}
           github-token: ${{ inputs.GITHUB_TOKEN }}
-          deploy-message: ${{ steps.commit_title.outputs.COMMIT_TITLE }}
+          deploy-message: |
+            ${{ steps.commit_title.outputs.COMMIT_TITLE }}
           alias: ${{ steps.netlify_alias.outputs.ALIAS }}
           # enable-commit-comment: false
           # enable-commit-status: false
