@@ -76,7 +76,10 @@ runs:
     - name: Pick Commit Title
       id: commit_title
       run: |
-        echo "COMMIT_TITLE=$(echo $COMMIT_MESSAGE | sed -n 1p)" >> $GITHUB_OUTPUT
+        echo $COMMIT_MESSAGE
+        echo $COMMIT_MESSAGE | sed -n 1p
+        COMMIT_TITLE=$(echo $COMMIT_MESSAGE | sed -n 1p)
+        echo "COMMIT_TITLE=$(echo $COMMIT_TITLE)" >> $GITHUB_OUTPUT
       env:
         COMMIT_MESSAGE: ${{ steps.commit_message.outputs.COMMIT_MESSAGE }}
       shell: bash
