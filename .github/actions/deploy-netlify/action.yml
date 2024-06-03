@@ -44,6 +44,7 @@ runs:
         fi
       shell: bash
 
+    # PR中でもコミットメッセージを参照してデバッグする用のステップ
     - name: Get Commit Message
       id: commit_message
       # https://docs.github.com/ja/actions/using-workflows/workflow-commands-for-github-actions#example-of-a-multiline-string
@@ -71,6 +72,15 @@ runs:
     #     NETLIFY_AUTH_TOKEN: ${{ inputs.NETLIFY_AUTH_TOKEN }}
     #     NETLIFY_SITE_ID: ${{ inputs.netlify-site-id }}
 
+    # コミットメッセージは複数行入ることがあるので、最初の行だけを取得
+    - name: Pick Commit Title
+      id: commit_title
+      run: |
+        echo "COMMIT_TITLE=$(echo $COMMIT_MESSAGE | sed -n 1p)" >> $GITHUB_OUTPUT
+      env:
+        COMMIT_MESSAGE: ${{ steps.commit_message.outputs.COMMIT_MESSAGE }}
+      shell: bash
+
     # リトライ可能なデプロイ
     - name: Retryable Deploying to Netlify
       # https://github.com/nick-fields/retry/issues/91
@@ -84,11 +94,7 @@ runs:
           production-branch: ${{ inputs.production-branch }}
           github-deployment-environment: ${{ steps.github_deployment_environment.outputs.GITHUB_DEPLOYMENT_ENVIRONMENT }}
           github-token: ${{ inputs.GITHUB_TOKEN }}
-          deploy-message: |
-            複数行メッセージの確認
-
-            インデントがきちんと入ってさえいればパラメータとして渡せるかを確認
-          # deploy-message: ${{ steps.commit_message.outputs.COMMIT_MESSAGE }}
+          deploy-message: ${{ steps.commit_title.outputs.COMMIT_TITLE }}
           # deploy-message: ${{ github.event.head_commit.message || github.event.pull_request.title }}
           alias: ${{ steps.netlify_alias.outputs.ALIAS }}
           # enable-commit-comment: false
